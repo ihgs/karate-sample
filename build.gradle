@@ -1,0 +1,33 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.21'
+
+    testCompile 'com.intuit.karate:karate-junit4:0.6.1'
+    testCompile 'com.intuit.karate:karate-apache:0.6.1'
+    testCompile 'net.masterthought:cucumber-reporting:3.8.0'
+}
+
+
+sourceSets {
+    test {
+        resources {
+            srcDir file('src/test/java')
+            exclude '**/*.java'
+        }
+    }
+}
+
+test {
+  systemProperty "cucumber.options", System.properties.getProperty("cucumber.options")
+  // ensure tests are always run
+  outputs.upToDateWhen { false }
+}
+
+def defaultEncoding = 'UTF-8'
+tasks.withType(AbstractCompile).each { it.options.encoding = defaultEncoding }
+tasks.withType(GroovyCompile).each { it.groovyOptions.encoding = defaultEncoding }
